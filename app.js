@@ -18,11 +18,18 @@ app.use(express.static(path.join(__dirname, "public/build")));
 app.use(
 	cors({
 		credentials: true,
-		origin: process.env.FRONTEND_URL || "http://localhost:3000",
+		origin: process.env.FRONTEND_URL || path.join(__dirname, "public/build/index.html"),
 	})
 );
 
 app.use("/", require("./routes/index"));
 app.use("/api/auth", require("./routes/auth"));
+
+if (process.env.NODE_ENV === "production") {
+	app.use("*", (req, res, next) => {
+	  // If no routes match, send them the React HTML.
+	  res.sendFile(path.join(__dirname, "public/build/index.html"));
+	});
+  }
 
 module.exports = app;

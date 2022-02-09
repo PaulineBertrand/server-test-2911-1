@@ -14,11 +14,11 @@ app.use(logger("dev"));
 app.use(express.json());
 app.use(express.urlencoded({ extended: false }));
 app.use(cookieParser());
-app.use(express.static(path.join(__dirname, "public/build")));
+app.use(express.static(path.join(__dirname, "public")));
 app.use(
 	cors({
 		credentials: true,
-		origin: process.env.FRONTEND_URL || path.join(__dirname, "public/build/index.html"),
+		origin: process.env.FRONTEND_URL || "http://localhost:3000",
 	})
 );
 
@@ -28,7 +28,7 @@ app.use("/api/auth", require("./routes/auth"));
 if (process.env.NODE_ENV === "production") {
 	app.use("*", (req, res, next) => {
 	  // If no routes match, send them the React HTML.
-	  res.sendFile(path.join(__dirname, "public/build/index.html"));
+	  res.sendFile(path.join(__dirname, "public/index.html"));
 	});
   }
 
